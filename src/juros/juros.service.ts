@@ -6,15 +6,7 @@ export class JurosService {
 
   calcular(dados: CalculoJurosDTO) {
 
-    this.validarDto(dados);
-
-    const vencimento = new Date(`${dados.dataVencimento}T00:00:00Z`);
-    if (
-      isNaN(vencimento.getTime()) ||
-      vencimento.toISOString().slice(0, 10) !== dados.dataVencimento
-    ) {
-      throw new BadRequestException('Data de vencimento inválida');
-    }
+    const vencimento = this.validarDto(dados);
 
     const dataCalculo = new Date().toLocaleDateString('en-CA', {
       timeZone: 'America/Sao_Paulo',
@@ -57,5 +49,15 @@ export class JurosService {
         'Data de vencimento deve estar no formato AAAA-MM-DD',
       );
     }
+
+    const vencimento = new Date(`${dados.dataVencimento}T00:00:00Z`);
+    if (
+      isNaN(vencimento.getTime()) ||
+      vencimento.toISOString().slice(0, 10) !== dados.dataVencimento
+    ) {
+      throw new BadRequestException('Data de vencimento inválida');
+    }
+
+    return vencimento;
   }
 }
